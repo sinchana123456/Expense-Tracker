@@ -2,12 +2,13 @@ import { useRef } from "react";
 import classes from './SignUp.module.css';
 
 const SignUp = (props) => {
-    const emailInputRef = useRef();
-    const passwordnputRef = useRef();
-    const confirmpasswordnputRef = useRef();
+    const emailInputRef = useRef('');
+    const passwordnputRef = useRef('');
+    const confirmpasswordnputRef = useRef('');
 
     const submitHandler = (event) => {
         event.preventDefault();
+        
         const enteredEmail = emailInputRef.current.value;
         const enteredPassword = passwordnputRef.current.value;
         const enteredcConfirmPassword = confirmpasswordnputRef.current.value;
@@ -18,7 +19,7 @@ const SignUp = (props) => {
           props.onSignUp(enteredEmail, enteredcConfirmPassword)
         }
       }
-
+      
       return(
         <section>
           <div className={classes.signUp}>
@@ -48,7 +49,6 @@ const SignUp = (props) => {
               <button>Sign Up</button>
             </form>
           </div>
-          <button className={classes.login}>Have an account? Login</button>
         </section>
       )
     }
