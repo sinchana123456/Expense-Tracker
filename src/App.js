@@ -1,7 +1,8 @@
 import { Fragment, useContext } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Authentication from './components/Authentication/Authentication';
-import DummyPage from './components/DummyPage';
+import Header from './components/Layout/Header';
+import UserProfile from './components/Layout/UserProfile';
 import AuthContext from './store/auth-context';
 
 const App = () => {
@@ -9,18 +10,26 @@ const App = () => {
 
   return (
     <Fragment>
-    <Switch>
-      {!authCntx.isLogin && (
-        // <Route path = '/authentication'>
-          <Authentication />
-      // </Route>
-      )}
-      {authCntx.isLogin && (
-        // <Route path = '/dummypage'>
-          <DummyPage />
-        // </Route>
-      )}
-    </Switch>
+      <Header />
+        <main>
+          <Switch>
+            {!authCntx.isLogin && (
+              <Route path = '/authentication'>
+              <Authentication />
+            </Route>
+            )}
+            {authCntx.isLogin && (
+            <Route path = '/' exact>
+              <Header />
+            </Route>
+            )}
+            {authCntx.isLogin && (
+            <Route path='/update-profile'>
+              <UserProfile />
+            </Route>
+            )}
+          </Switch>
+        </main>
     </Fragment>
   );
 }
