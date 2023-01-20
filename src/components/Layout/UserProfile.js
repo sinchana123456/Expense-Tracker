@@ -3,6 +3,7 @@ import classes from './UserProfile.module.css';
 import { BsGithub, BsGlobe } from 'react-icons/bs';
 import { useContext, useRef, useEffect } from 'react';
 import AuthContext from '../../store/auth-context';
+import Button from '../UI/Button';
 
 const UserProfile = (props) => {
     const nameInputRef = useRef('');
@@ -71,7 +72,7 @@ const UserProfile = (props) => {
                         required
                         ref={urlInputRef}
                     />
-                <button>Update</button>
+                <Button>Update</Button>
             </form>
         </section>
     )
