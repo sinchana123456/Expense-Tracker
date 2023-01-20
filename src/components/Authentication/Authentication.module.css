@@ -1,23 +1,7 @@
+.auth {
+  margin: 0 3rem;
+  text-align: center;
 
-.signup {
-    cursor: pointer;
-    background-color: lightgreen;
-    border: 1px solid rgb(215, 215, 215);
-    text-align: center;
-    position: relative;
-    left: 37.44%;
-    width: 25%;
-    margin: 12px auto;
-    border-radius: 5px;
-    padding: 12px;
-    font-size: 15px;
-    font-weight: bold;
-  }
-  
-  
-  .signup:hover,
-  .signup:focus{
-    background-color: rgb(223, 252, 242);
-    background-color: rgb(42, 151, 42);
-    color: white;
-  }
+}
+
+

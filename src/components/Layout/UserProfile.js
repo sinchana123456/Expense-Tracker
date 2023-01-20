@@ -41,7 +41,7 @@ const UserProfile = (props) => {
         }
         try {
             const res = await axios.post (
-                'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBMnZAZWuByk0EHsJlfFgLCX822DsLNQXo'
+                'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCo8dRipd6E0B7hUHwaaGSlxWF1cPcp9QY'
                 , updatedInfo 
             );
                 console.log(res);

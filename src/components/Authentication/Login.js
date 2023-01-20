@@ -33,7 +33,6 @@ const Login = (props) => {
                     ref={passwordnputRef}
                 />
                 <button>Login</button>
-                <a href='p'>Forgot password ?</a>
             </form>
             </div>
         </section>
