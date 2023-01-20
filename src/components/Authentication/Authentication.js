@@ -34,6 +34,7 @@ const Authentication = () => {
                 }
               })
               .then((data) => {
+                console.log('successfully created account');
                 console.log(data);
               })
               .catch((err) => {
@@ -69,6 +70,7 @@ const Authentication = () => {
               .then((data) => {
                 authCntx.login(data.idToken)
                 console.log(data);
+                console.log('successfully loggedIn');
               })
               .catch((err) => {
                 alert(err.message);
