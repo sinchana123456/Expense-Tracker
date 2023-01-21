@@ -42,8 +42,25 @@
   }
 
   .list{
-    margin-left: 25rem;
+    margin-left: 32rem;
     width: 50%;
+    font-size: 18px;
+    line-height: 2rem;
   }
+
+  .list ul{
+    list-style: none;
+  }
+
+  .list button{
+    background-color: rgb(97, 243, 243);
+    border-radius: 7px;
+    border: 1px solid skyblue;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    font-weight: 500;
+    padding: 3px;
+    cursor: pointer;
+  }
+
 
   
