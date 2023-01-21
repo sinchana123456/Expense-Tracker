@@ -1,4 +1,5 @@
-import { Fragment, useRef, useState } from 'react';
+import axios from 'axios';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import Button from '../UI/Button';
 import classes from './Expense.module.css';
 
@@ -7,8 +8,21 @@ const Expense = (props) => {
     const descriptionRef = useRef('');
     const categoryRef = useRef('');
     const [expenses, setExpenses] = useState([]);
+    
+    useEffect(() => {
+        const res = axios.get(
+            'https://expense-tracker-9a6ab-default-rtdb.firebaseio.com/expense.json'
+            ).then((res) => {
+                console.log(res.data);
+                const retrivedObjValues = Object.values(res.data);
+                console.log(retrivedObjValues);
+                setExpenses(retrivedObjValues);
+            }).catch((err) => {
+                console.log(err);
+            })
+    }, []);
 
-const submitHandler = (event) => {
+const submitHandler = async(event) => {
     event.preventDefault();
 
     const enteredExpense = expenseRef.current.value;
@@ -20,8 +34,19 @@ const submitHandler = (event) => {
         description: enteredDescription,
         category: enteredCategory
     };
-    setExpenses( [...expenses, expenseObj] );
+
+    try {
+        const res = await axios.post('https://expense-tracker-9a6ab-default-rtdb.firebaseio.com/expense.json',
+        expenseObj );
+        console.log(res);
+        setExpenses( [...expenses, expenseObj] );
+        
+    } catch (err) {
+        console.log(err);
+    }
+    
 };
+
 
     return (
         <Fragment>
@@ -66,10 +91,10 @@ const submitHandler = (event) => {
                             </li>
                         </ul>
                     )
-                })}            
+                })};            
             </div>
         </Fragment>
-    )
+    );
 
 };
 

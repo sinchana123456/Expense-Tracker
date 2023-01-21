@@ -60,7 +60,7 @@ const Header = () => {
                             onMouseEnter={mouseEnter}
                             onMouseLeave={mouseLeave}
                             activeClassName={classes.active}>
-                            Expense
+                            Add Expense
                         </NavLink>
                     </li>
                     )}                         
