@@ -1,16 +1,19 @@
-import { useContext, useState } from "react";
-import AuthContext from "../../store/auth-context";
+import { useState } from "react";
 import Button from "../UI/Button";
 import classes from './Authentication.module.css';
 import ForgotPassword from "./ForgotPassword";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import { useDispatch } from "react-redux";
+import { authAction } from "../../store/auth-reducer";
+import { useHistory } from "react-router-dom";
 
 const Authentication = () => {
     const [isLogin, setIsLogin] = useState(false);
     const [isForgot, setIsForgot] = useState(false);
-    const authCntx = useContext(AuthContext);
-
+    const dispatch = useDispatch();
+    const history = useHistory();
+    
     const SignUpHandler = (email, password) => {
         fetch(
                 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBMnZAZWuByk0EHsJlfFgLCX822DsLNQXo',
@@ -71,9 +74,11 @@ const Authentication = () => {
                 }
               })
               .then((data) => {
-                authCntx.login(data.idToken)
+                const loginObj={idToken: data.idToken, email: data.email}
+                dispatch(authAction.login(loginObj))
                 console.log(data);
                 console.log('successfully loggedIn');
+                history.replace('/expenses');
               })
               .catch((err) => {
                 alert(err.message);

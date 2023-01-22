@@ -1,7 +1,6 @@
 import { useState } from "react";
 import AuthContext from "./auth-context";
 
-
 const AuthProvider = (props) => {
     const initialToken = localStorage.getItem('idToken');
     const initialEmail = localStorage.getItem("email");

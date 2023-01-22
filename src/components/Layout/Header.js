@@ -1,16 +1,19 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useHistory,  } from 'react-router-dom';
-import AuthContext from '../../store/auth-context';
+import { authAction } from '../../store/auth-reducer';
 import classes from './Header.module.css';
 import LogOut from './LogOut';
 
 const Header = () => {
-    const authCntx = useContext(AuthContext);
+    const isLogin = useSelector((state) => state.authentication.isLogin)
+    console.log(isLogin, "in header");
+    const dispatch = useDispatch()
     const history = useHistory();
     const [isHover, setIsHover] = useState(false);
 
     const logOutHandler = () => {
-        authCntx.logout();
+        dispatch(authAction.logout());
         history.replace('/auth')
     };
     
@@ -34,7 +37,7 @@ const Header = () => {
                             Home
                         </NavLink>
                     </li>
-                    {!authCntx.isLogin && (
+                    {!isLogin && (
                         <li>
                         <NavLink to='/auth' 
                             activeClassName={classes.active}>
@@ -42,7 +45,7 @@ const Header = () => {
                         </NavLink>
                     </li>
                     )} 
-                    {authCntx.isLogin && (
+                    {isLogin && (
                         <li>
                         <NavLink to='/profile' 
                             activeClassName={classes.active}>
@@ -50,7 +53,7 @@ const Header = () => {
                         </NavLink>
                     </li>
                     )}  
-                    {authCntx.isLogin && (
+                    {isLogin && (
                         <li>
                         <NavLink to='/expense'
                             style={{
@@ -60,13 +63,13 @@ const Header = () => {
                             onMouseEnter={mouseEnter}
                             onMouseLeave={mouseLeave}
                             activeClassName={classes.active}>
-                            Add Expense
+                            Expenses
                         </NavLink>
                     </li>
                     )}                         
                 </ul>
             </nav>
-            {authCntx.isLogin && (
+            {isLogin && (
                 <LogOut 
                     onClick={logOutHandler}>
                     Log Out

@@ -1,30 +1,42 @@
 import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
 import { Fragment, useEffect, useRef, useState } from 'react';
 import Button from '../UI/Button';
 import { BiRupee } from 'react-icons/bi';
 import classes from './Expense.module.css';
+import { expensAction } from '../../store/expense-reducer';
 
 const Expense = () => {
     const expenseRef = useRef(null);
     const descriptionRef = useRef('');
     const categoryRef = useRef('');
     const [expenses, setExpenses] = useState([]);
+    const [totalExpense, setTotalExpense] = useState(0);
+    const dispatch = useDispatch();
     const [isHover, setIsHover] = useState(false);
-    
+
+    const expensesDispatched = useSelector((state) => state.expense);
+    console.log(expensesDispatched.expenses);
+
     const getExpenseData = () => {
         axios.get(
             'https://expense-tracker-9a6ab-default-rtdb.firebaseio.com/expense.json'
             ).then((res) => {
-                console.log(res.data);
-                setExpenses(res.data);
+                const data = res.data;
+                let sumOfExpenses = 0;
+                Object.values(data).forEach((item) => {
+                    sumOfExpenses += Number(item.amount)
+                })
+                setTotalExpense(sumOfExpenses);
+                dispatch(expensAction.onAddOrGetExpense(data))
             }).catch((err) => {
                 console.log(err);
             })
     };
 
-    useEffect( getExpenseData , []);
+    useEffect(getExpenseData, [dispatch]);
 
-    const submitHandler = async(event) => {
+    const addExpenseHandler = async(event) => {
         event.preventDefault();
 
         const enteredExpense = expenseRef.current.value;
@@ -41,8 +53,7 @@ const Expense = () => {
             const res = await axios.post('https://expense-tracker-9a6ab-default-rtdb.firebaseio.com/expense.json',
             expenseObj );
             console.log(res);
-            setExpenses( {...expenses, expenseObj} );
-            
+            getExpenseData();
         } catch (err) {
             console.log(err);
         }
@@ -53,7 +64,9 @@ const Expense = () => {
             `https://expense-tracker-9a6ab-default-rtdb.firebaseio.com/expense/${expenseId}.json`
         ).then((res) => {
             console.log(res);
-           getExpenseData();
+            const tempExpense = { ...expenses };
+            delete tempExpense[expenseId];
+            setExpenses(tempExpense)
         }).catch((err) => {
             console.log(err);
         })
@@ -76,7 +89,7 @@ const Expense = () => {
     
     return (
         <Fragment>
-            <form className={classes.expense}onSubmit={submitHandler}>
+            <form className={classes.expense}onSubmit={addExpenseHandler}>
                 <h1>Add New Expense</h1>
                 <input
                     name='expense'
@@ -106,16 +119,17 @@ const Expense = () => {
                     </select>
                 <Button>Add Expense</Button>
             </form>
+            {totalExpense > 10000 && <Button>Active Premium</Button>}
             <div className={classes.list}>
                 <ul>
-                    {Object.keys(expenses).map((expense) => {
+                    {Object.keys(expensesDispatched.expenses).map((expense) => {
                     return (
                             <li key={expense}>
                                 <span style={{fontWeight: 'bold'}}><BiRupee />
-                                    {expenses[expense].amount}  
+                                    {expensesDispatched.expenses[expense].amount}  
                                 </span>
-                                <span> for ( {expenses[expense].description}) </span>
-                                <span>  { expenses[expense].category }  </span>
+                                <span> for ( {expensesDispatched.expenses[expense].description}) </span>
+                                <span>  { expensesDispatched.expenses[expense].category }  </span>
                                 <span>
                                     <button  
                                         style={{
