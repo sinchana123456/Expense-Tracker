@@ -62,5 +62,17 @@
     cursor: pointer;
   }
 
+  .download button{
+    background-color: rgb(34, 155, 34);
+    border-radius: 7px;
+    border: 1px solid green;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+    font-weight: 500;
+    padding: 5px;
+    cursor: pointer;
+    color: white;
+    margin-left: 44rem;
+  }
+
 
   

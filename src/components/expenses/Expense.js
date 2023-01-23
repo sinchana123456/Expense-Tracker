@@ -5,17 +5,19 @@ import Button from '../UI/Button';
 import { BiRupee } from 'react-icons/bi';
 import classes from './Expense.module.css';
 import { expensAction } from '../../store/expense-reducer';
+import { ThemeAction } from '../../store/theme-reducer';
+import { saveAs } from "file-saver";
 
 const Expense = () => {
     const expenseRef = useRef(null);
     const descriptionRef = useRef('');
     const categoryRef = useRef('');
-    const [expenses, setExpenses] = useState([]);
-    const [totalExpense, setTotalExpense] = useState(0);
-    const dispatch = useDispatch();
-    const [isHover, setIsHover] = useState(false);
 
-    const expensesDispatched = useSelector((state) => state.expense);
+    const [totalExpense, setTotalExpense] = useState(0);
+    const [isHover, setIsHover] = useState(false);
+    const dispatch = useDispatch();
+
+    const expensesDispatched = useSelector((state) => state.expenses);
     console.log(expensesDispatched.expenses);
 
     const getExpenseData = () => {
@@ -64,19 +66,34 @@ const Expense = () => {
             `https://expense-tracker-9a6ab-default-rtdb.firebaseio.com/expense/${expenseId}.json`
         ).then((res) => {
             console.log(res);
-            const tempExpense = { ...expenses };
-            delete tempExpense[expenseId];
-            setExpenses(tempExpense)
+            getExpenseData();
         }).catch((err) => {
             console.log(err);
         })
     };
 
     const editExpenseHandler = (expenseId) => {
-        expenseRef.current.value = expenses[expenseId].amount;
-        descriptionRef.current.value = expenses[expenseId].description;
-        categoryRef.current.value = expenses[expenseId].category;
+        expenseRef.current.value = expensesDispatched.expenses[expenseId].amount;
+        descriptionRef.current.value = expensesDispatched.expenses[expenseId].description;
+        categoryRef.current.value = expensesDispatched.expenses[expenseId].category;
         deleteExpenseHandler(expenseId);
+    };
+
+    const downloadHandler = () => {
+        const file = Object.entries(expensesDispatched.expenses).map((expense) => {
+            console.log(expense);
+            console.log(expense[1]);
+            return [expense[1].amount, expense[1].description,expense[1].category ];
+        })
+        console.log('csvfile', file);
+        const makeCSV = (rows) => {
+            return rows.map((row) => row.join(',')).join('\n')
+        }
+        console.log([makeCSV(file)]);
+        const blob = new Blob([makeCSV(file)]);
+        const url = URL.createObjectURL(blob);
+        console.log(url);
+        saveAs(url, 'expenses.csv');
     };
 
     const mouseEnter = () => {
@@ -119,7 +136,18 @@ const Expense = () => {
                     </select>
                 <Button>Add Expense</Button>
             </form>
-            {totalExpense > 10000 && <Button>Active Premium</Button>}
+            {totalExpense > 10000 && (
+                <Button onClick={() => 
+                    dispatch(ThemeAction.onThemeChange())}>
+                    Active Premium
+                </Button>
+            )}
+            <div className={classes.download}>
+            <button 
+                onClick={downloadHandler}>
+                Download file
+            </button>
+            </div>
             <div className={classes.list}>
                 <ul>
                     {Object.keys(expensesDispatched.expenses).map((expense) => {
