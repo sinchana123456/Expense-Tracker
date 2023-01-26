@@ -7,7 +7,6 @@ import LogOut from './LogOut';
 
 const Header = () => {
     const isLogin = useSelector((state) => state.authentication.isLogin)
-    console.log(isLogin, "in header");
     const dispatch = useDispatch()
     const history = useHistory();
     const [isHover, setIsHover] = useState(false);
@@ -54,7 +53,7 @@ const Header = () => {
                     </li>
                     )}  
                     {isLogin && (
-                        <li>
+                    <li>
                         <NavLink to='/expense'
                             style={{
                                 backgroundColor: isHover ? 'green': '',

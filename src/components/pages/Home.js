@@ -1,7 +1,11 @@
+import { Fragment } from "react";
 
 const Home = () => {
     return (
-        <div>Home</div>
+        <Fragment>
+            <div>Home</div>
+            <p>expense tracker home!!!</p>
+        </Fragment>
     )
 };
 

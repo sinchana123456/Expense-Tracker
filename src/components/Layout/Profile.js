@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { useContext, useState } from 'react';
-import AuthContext from '../../store/auth-context';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Button from '../UI/Button';
 import classes from './Profile.module.css';
 import UserProfile from './UserProfile';
 
 const Profile = () => {
     const [error, setError] = useState('');
-    const authCntx = useContext(AuthContext);
+    const idToken = useSelector(state => state.authentication.idToken);
 
     const verifyEmailHandler = () => {
         axios.post('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBMnZAZWuByk0EHsJlfFgLCX822DsLNQXo',
-            {idToken: authCntx.token, requestType:'VERIFY_EMAIL'}
+            {idToken: idToken, requestType:'VERIFY_EMAIL'}
                 ).then((res) => {
                     console.log(res);
             }).catch((err) => {

@@ -78,7 +78,7 @@ const Authentication = () => {
                 dispatch(authAction.login(loginObj))
                 console.log(data);
                 console.log('successfully loggedIn');
-                history.replace('/expenses');
+                history.replace('/home');
               })
               .catch((err) => {
                 alert(err.message);

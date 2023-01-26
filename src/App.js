@@ -9,18 +9,18 @@ import ProfilePage from './components/pages/ProfilePage';
 
 const App = () => {  
   const isLogin = useSelector(state => state.authentication.isLogin);
-  console.log(isLogin);
 
   return (
         <Fragment>
         <Header />
         <main>
           <Switch>
+          {isLogin &&
+          <Route path='/' exact>
+              <Home />
+            </Route>}
             <Route path='/auth'>
               {!isLogin && <Authentication />}
-            </Route>
-            <Route path='/' exact>
-              <Home />
             </Route>
             <Route path='/profile'>
               {isLogin && <ProfilePage />}

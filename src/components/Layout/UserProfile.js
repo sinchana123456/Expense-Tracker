@@ -1,21 +1,23 @@
 import axios from 'axios';
 import classes from './UserProfile.module.css';
 import { BsGithub, BsGlobe } from 'react-icons/bs';
-import { useContext, useRef, useEffect } from 'react';
-import AuthContext from '../../store/auth-context';
+import { useRef, useEffect } from 'react';
 import Button from '../UI/Button';
+import { useSelector } from 'react-redux';
 
 const UserProfile = (props) => {
     const nameInputRef = useRef('');
     const urlInputRef = useRef('');
-    const authCntx = useContext(AuthContext);
+    const idToken = useSelector(state => state.authentication.idToken)
     
   useEffect(() => {
-    axios.post('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBMnZAZWuByk0EHsJlfFgLCX822DsLNQXo',
-        {idToken: authCntx.token}
+    axios.post(
+        'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBMnZAZWuByk0EHsJlfFgLCX822DsLNQXo',
+        {idToken: idToken}
     ).then((res) => {
         console.log(res);
         console.log(res.data.users[0])
+
         const displayName = res.data.users[0].displayName;
         const photoUrl = res.data.users[0].photoUrl;
 
@@ -24,7 +26,7 @@ const UserProfile = (props) => {
       }).catch ((err) => {
         console.log(err);
     })
-  }, [authCntx.token]);
+  });
     
     const updateProfiletHandler = async(event) => {
         event.preventDefault();
@@ -33,7 +35,7 @@ const UserProfile = (props) => {
         const enteredUrl = urlInputRef.current.value;
 
         const updatedInfo = {
-            idToken: authCntx.token,
+            idToken: idToken,
             displayName: enteredName,
             photoUrl: enteredUrl,
             deleteAttribute: null,
